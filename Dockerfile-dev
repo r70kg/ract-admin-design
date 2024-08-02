@@ -1,0 +1,23 @@
+# 使用官方的Node.js镜像作为基础镜像
+FROM node:18.20-alpine
+
+RUN npm config set registry https://registry.npmmirror.com
+
+# 设置工作目录为/app
+WORKDIR /app
+
+# 复制package.json和package-lock.json 到容器中
+COPY package*.json ./
+
+RUN yarn install
+
+RUN ls -l /app
+
+# 复制所有文件到工作目录
+COPY . .
+
+EXPOSE 8201
+
+# 启动开发服务器
+CMD ["npm", "run", "serve"]
+

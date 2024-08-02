@@ -1,0 +1,32 @@
+version: '1'
+services:
+  # 应用容器
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile-dev  # 指定Dockerfile文件
+    container_name: react-app-container
+    environment:
+      NODE_ENV: development
+    ports:
+      - "8201:8201" 
+    volumes:
+      - .:/app  # 将本地项目目录映射到容器的/app目录
+      - '/app/node_modules'  # 映射node_modules目录，避免 宿主主机没有node_modules 时覆盖容器中的node_modules
+
+  react-prod:
+  # 应用容器
+    build:
+      context: .
+      dockerfile: Dockerfile-prod  # 指定Dockerfile文件
+    container_name: react-prod-container
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "8202:8202"
+
+
+# 网络配置，这样vue-app容器和web-server容器可以相互通信
+networks:
+  default:
+    driver: bridge
